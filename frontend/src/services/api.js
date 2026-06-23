@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// Detecta si está en Railway (usa la variable interna) o en tu PC (usa localhost)
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: `${API_BASE_URL}/api`,
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -17,7 +20,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Interceptor: si el servidor devuelve 401, limpia la sesión
+// Interceptor: si el servidor devuelve 401 (No autorizado), limpia la sesión y redirige
 api.interceptors.response.use(
   (response) => response,
   (error) => {
